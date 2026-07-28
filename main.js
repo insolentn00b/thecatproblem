@@ -4,6 +4,8 @@
 (function () {
   "use strict";
 
+  window.__catBuild = "s4-gallery";
+
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   /* ---------- reveal-on-scroll ---------- */
@@ -127,5 +129,43 @@
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onScroll);
     render(); // set initial state
+  }
+
+  /* ---------- Screen 4: scroll-driven species gallery ---------- */
+  const gallery = document.querySelector(".gallery");
+  if (gallery) {
+    const cards = Array.from(gallery.querySelectorAll(".species-card"));
+    const dots = Array.from(gallery.querySelectorAll(".rail-dot"));
+    const N = cards.length;
+    let lastIdx = -1;
+    let gTicking = false;
+
+    const clampG = (n) => (n < 0 ? 0 : n > 1 ? 1 : n);
+
+    function gRender() {
+      gTicking = false;
+      const rect = gallery.getBoundingClientRect();
+      const total = gallery.offsetHeight - window.innerHeight;
+      const p = clampG(total > 0 ? -rect.top / total : 0);
+      let idx = Math.floor(p * N);
+      if (idx >= N) idx = N - 1;
+      if (idx < 0) idx = 0;
+      if (idx !== lastIdx) {
+        cards.forEach((c, i) => c.classList.toggle("active", i === idx));
+        dots.forEach((d, i) => d.classList.toggle("on", i <= idx));
+        lastIdx = idx;
+      }
+    }
+
+    function gScroll() {
+      if (!gTicking) {
+        gTicking = true;
+        requestAnimationFrame(gRender);
+      }
+    }
+
+    window.addEventListener("scroll", gScroll, { passive: true });
+    window.addEventListener("resize", gScroll);
+    gRender();
   }
 })();

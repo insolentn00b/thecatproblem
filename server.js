@@ -35,7 +35,11 @@ http
         return res.end("Not found");
       }
       const ext = path.extname(filePath).toLowerCase();
-      res.writeHead(200, { "Content-Type": TYPES[ext] || "application/octet-stream" });
+      res.writeHead(200, {
+        "Content-Type": TYPES[ext] || "application/octet-stream",
+        // never cache during local dev — avoids stale HTML/CSS/JS in the preview
+        "Cache-Control": "no-store, must-revalidate",
+      });
       res.end(data);
     });
   })

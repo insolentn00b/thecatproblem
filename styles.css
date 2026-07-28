@@ -453,6 +453,119 @@ body {
 .reckon-source em { font-style: italic; }
 
 /* ============================================================
+   SCREEN 4 — the gallery of the lost
+   ============================================================ */
+.gallery-intro { background: var(--cream-deep); }
+.gallery-intro strong { font-weight: 800; }
+
+.gallery {
+  position: relative;
+  height: 520vh;                 /* scroll distance across the 5 species */
+  background: var(--cream-deep);
+}
+.gallery-sticky {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 40px 24px;
+}
+.gallery-kicker {
+  margin: 0 0 22px;
+  font-weight: 700;
+  font-size: clamp(12px, 1.4vw, 14px);
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--terracotta);
+}
+.species-stack {
+  position: relative;
+  width: 100%;
+  max-width: 540px;
+  height: clamp(380px, 60vh, 460px);
+  margin: 0 auto;
+}
+.species-card {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  opacity: 0;
+  transform: translateY(18px) scale(.985);
+  transition: opacity .6s var(--ease), transform .6s var(--ease);
+  pointer-events: none;
+}
+.species-card.active {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+.silhouette { color: #8E8379; margin-bottom: 6px; }
+.sil {
+  width: clamp(150px, 38vw, 220px);
+  height: auto;
+  display: block;
+}
+.species-name {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(24px, 4vw, 38px);
+  letter-spacing: -.5px;
+  line-height: 1.05;
+  color: var(--ink);
+  margin: 4px 0 8px;
+}
+.species-meta {
+  font-size: clamp(12.5px, 1.6vw, 15px);
+  font-weight: 700;
+  letter-spacing: .02em;
+  color: var(--terracotta);
+  margin: 0 0 14px;
+}
+.species-note {
+  font-size: clamp(15px, 1.9vw, 18px);
+  line-height: 1.55;
+  color: var(--ink);
+  max-width: 440px;
+  margin: 0 0 16px;
+}
+.species-link {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--ink-soft);
+  text-decoration: none;
+  border-bottom: 1.5px solid rgba(110, 95, 82, .35);
+  padding-bottom: 1px;
+  transition: color .25s var(--ease), border-color .25s var(--ease);
+}
+.species-link:hover { color: var(--terracotta); border-color: var(--terracotta); }
+
+.gallery-rail {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 26px;
+}
+.rail-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: rgba(150, 120, 100, .22);
+  transition: background .3s var(--ease), transform .3s var(--ease);
+}
+.rail-dot.on { background: var(--terracotta); transform: scale(1.15); }
+
+.gallery-outro {
+  background: linear-gradient(180deg, var(--cream-deep) 0%, var(--cream) 100%);
+}
+.gallery-outro strong { color: var(--ink); font-weight: 800; }
+
+/* ============================================================
    Accessibility — respect reduced motion
    ============================================================ */
 @media (prefers-reduced-motion: reduce) {
