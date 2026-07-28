@@ -74,4 +74,58 @@
   }
   loop(blink, 2600, 5200);
   loop(twitch, 4000, 9000);
+
+  /* ---------- Screen 2: scroll-driven scale counter ---------- */
+  const scaleSection = document.querySelector(".scale");
+  const countEl = document.getElementById("birdCount");
+  const field = document.getElementById("dotfield");
+
+  if (scaleSection && countEl && field) {
+    const TARGET = 2_400_000_000; // median US bird estimate (Loss et al. 2013)
+    const DOTS = 2400; // each dot = 1,000,000 birds
+
+    // build the dot field once
+    const frag = document.createDocumentFragment();
+    const dotEls = new Array(DOTS);
+    for (let i = 0; i < DOTS; i++) {
+      const d = document.createElement("span");
+      d.className = "dot";
+      dotEls[i] = d;
+      frag.appendChild(d);
+    }
+    field.appendChild(frag);
+
+    let lastLit = 0;
+    let ticking = false;
+
+    const clamp01 = (n) => (n < 0 ? 0 : n > 1 ? 1 : n);
+
+    function render() {
+      ticking = false;
+      const rect = scaleSection.getBoundingClientRect();
+      const total = scaleSection.offsetHeight - window.innerHeight;
+      const p = clamp01(total > 0 ? -rect.top / total : 0);
+
+      countEl.textContent = Math.round(p * TARGET).toLocaleString("en-US");
+
+      const lit = Math.round(p * DOTS);
+      if (lit > lastLit) {
+        for (let i = lastLit; i < lit; i++) dotEls[i].classList.add("lit");
+      } else if (lit < lastLit) {
+        for (let i = lit; i < lastLit; i++) dotEls[i].classList.remove("lit");
+      }
+      lastLit = lit;
+    }
+
+    function onScroll() {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(render);
+      }
+    }
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    render(); // set initial state
+  }
 })();
