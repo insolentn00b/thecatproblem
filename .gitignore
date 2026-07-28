@@ -1,0 +1,11 @@
+# OS cruft
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor
+.vscode/
+*.log
+
+# Local Claude Code settings (keep launch.json, drop machine-local settings)
+.claude/settings.local.json

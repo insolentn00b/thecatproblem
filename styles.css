@@ -1,0 +1,253 @@
+/* ============================================================
+   TheCatProblem.com — global styles
+   Warm, friendly, a little cute. Deep-sea-style stepped scroll.
+   ============================================================ */
+
+:root {
+  /* --- warm near-white paper palette --- */
+  --cream:        #FDFBF6;   /* warm off-white, keeps it professional */
+  --cream-deep:   #F6EFE2;
+  --dusk:         #EFE4D0;
+  --ink:          #38302A;   /* warm near-black */
+  --ink-soft:     #6E5F52;
+  --marigold:     #E8A23D;
+  --terracotta:   #D9744A;
+  --sage:         #8FA98A;
+
+  /* --- the cat (soft slate grey — refined, not mascot-y) --- */
+  --cat:          #A6ABB2;
+  --cat-dark:     #7B818B;
+  --cat-cream:    #F1F0ED;
+  --cat-pink:     #E8A7A2;
+
+  --font-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --font-body:    "Plus Jakarta Sans", system-ui, sans-serif;
+
+  --ease: cubic-bezier(.22, .61, .36, 1);
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  color: var(--ink);
+  background: var(--cream);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+/* ---------- brand mark ---------- */
+.brand {
+  position: fixed;
+  top: 22px; left: 26px;
+  z-index: 50;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: .2px;
+  color: var(--ink);
+  text-decoration: none;
+  opacity: .72;
+  transition: opacity .3s var(--ease);
+  mix-blend-mode: multiply;
+}
+.brand:hover { opacity: 1; }
+.brand-dot { color: var(--terracotta); }
+
+/* ============================================================
+   Stepped-scroll scaffolding
+   Each .step is (at least) a full viewport; content reveals in.
+   ============================================================ */
+.step {
+  position: relative;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 24px;
+  text-align: center;
+}
+
+/* reveal-on-scroll primitive */
+.reveal {
+  opacity: 0;
+  transform: translateY(26px);
+  transition: opacity .9s var(--ease), transform .9s var(--ease);
+}
+.reveal.in { opacity: 1; transform: none; }
+/* gentle stagger for stacked reveals in a section */
+.in-view .reveal:nth-child(1) { transition-delay: .00s; }
+.in-view .reveal:nth-child(2) { transition-delay: .10s; }
+.in-view .reveal:nth-child(3) { transition-delay: .20s; }
+.in-view .reveal:nth-child(4) { transition-delay: .30s; }
+.in-view .reveal:nth-child(5) { transition-delay: .42s; }
+
+/* ============================================================
+   SCREEN 1 — hero
+   ============================================================ */
+.hero { overflow: hidden; }
+
+.hero-glow {
+  position: absolute;
+  left: 50%; top: 46%;
+  width: 120vmax; height: 120vmax;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle at center,
+              #FFFFFF 0%, #FDF7EC 34%, var(--cream) 64%);
+  z-index: 0;
+}
+
+.hero-inner {
+  position: relative;
+  z-index: 2;
+  max-width: 720px;
+}
+
+.kicker {
+  font-weight: 700;
+  font-size: clamp(12px, 1.4vw, 14px);
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--terracotta);
+  margin: 0 0 18px;
+}
+
+.hero-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(46px, 8.8vw, 96px);
+  line-height: 1.0;
+  letter-spacing: -1.8px;
+  margin: 0 0 22px;
+}
+
+.hero-sub {
+  font-size: clamp(17px, 2.1vw, 21px);
+  line-height: 1.6;
+  color: var(--ink-soft);
+  max-width: 520px;
+  margin: 0 auto 8px;
+  font-weight: 500;
+}
+
+.cat-wrap {
+  width: clamp(200px, 34vw, 290px);
+  margin: 26px auto 20px;
+}
+
+.hero-turn {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-weight: 600;
+  font-size: clamp(18px, 2.4vw, 24px);
+  color: var(--ink);
+  margin: 4px 0 0;
+}
+
+/* ---------- floating motes ---------- */
+.motes { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+.mote {
+  position: absolute;
+  bottom: -10px;
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--marigold);
+  opacity: 0;
+  animation: rise linear infinite;
+}
+@keyframes rise {
+  0%   { transform: translateY(0) scale(.6);   opacity: 0; }
+  12%  { opacity: .5; }
+  100% { transform: translateY(-92vh) scale(1); opacity: 0; }
+}
+
+/* ---------- scroll cue ---------- */
+.scroll-cue {
+  position: absolute;
+  bottom: 26px; left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  color: var(--ink-soft);
+  font-size: 12.5px; letter-spacing: .12em; text-transform: uppercase; font-weight: 600;
+}
+.scroll-cue svg { animation: bob 1.8s var(--ease) infinite; }
+@keyframes bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(6px); } }
+
+/* ============================================================
+   The cat — living idle animation
+   ============================================================ */
+.cat { width: 100%; height: auto; display: block; overflow: visible; }
+
+.cat-shadow { fill: rgba(90, 80, 70, .14); }
+
+.body      { fill: var(--cat); }
+.belly     { fill: var(--cat-cream); }
+.head      { fill: var(--cat); }
+.ear       { fill: var(--cat); }
+.ear-inner { fill: var(--cat-pink); }
+.stripe    { stroke: var(--cat-dark); stroke-width: 6; stroke-linecap: round; fill: none; opacity: .85; }
+.blush     { fill: var(--cat-pink); opacity: .42; }
+.eyeball   { fill: #2A2622; }
+.glint     { fill: #FFFFFF; }
+.glint-sm  { fill: #FFFFFF; opacity: .8; }
+.nose      { fill: var(--cat-pink); stroke: #CE7C72; stroke-width: 1.5; stroke-linejoin: round; }
+.mouth     { stroke: #9C7F72; stroke-width: 3; fill: none; stroke-linecap: round; }
+.whiskers path { stroke: #C4BEB6; stroke-width: 2; stroke-linecap: round; }
+
+/* breathing */
+.cat-torso { transform-box: fill-box; transform-origin: 50% 100%; animation: breathe 4.6s ease-in-out infinite; }
+@keyframes breathe {
+  0%, 100% { transform: scaleY(1) scaleX(1); }
+  50%      { transform: scaleY(1.025) scaleX(.992); }
+}
+
+/* tail sway */
+.tail, .tail-tip {
+  transform-box: fill-box;
+  transform-origin: 4px 64px;   /* near the base where it meets the body */
+  animation: sway 3.9s ease-in-out infinite;
+}
+@keyframes sway {
+  0%, 100% { transform: rotate(-5deg); }
+  50%      { transform: rotate(7deg);  }
+}
+
+/* blink — toggled by JS */
+.eyes { transform-box: fill-box; transform-origin: 50% 50%; transition: transform .11s var(--ease); }
+.eyes.blink { transform: scaleY(.12); }
+
+/* ear twitch — toggled by JS (rotate slightly) */
+.ear { transform-box: fill-box; transform-origin: 50% 100%; transition: transform .18s var(--ease); }
+.ear.twitch { transform: rotate(-7deg); }
+
+/* ============================================================
+   BRIDGE
+   ============================================================ */
+.bridge {
+  background: linear-gradient(180deg, var(--cream) 0%, var(--cream-deep) 100%);
+}
+.bridge-line {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(26px, 4.6vw, 46px);
+  line-height: 1.32;
+  color: var(--ink);
+  max-width: 760px;
+  letter-spacing: -.5px;
+}
+.bridge-line em { color: var(--terracotta); font-style: normal; font-weight: 700; }
+
+/* ============================================================
+   Accessibility — respect reduced motion
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  .cat-torso, .tail, .tail-tip, .scroll-cue svg, .mote { animation: none !important; }
+  .reveal { transition-duration: .01ms; }
+  html { scroll-behavior: auto; }
+}

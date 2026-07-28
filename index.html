@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>The Cat Problem</title>
+  <meta name="description" content="A gentle, factual look at what free-roaming cats mean for the world around us." />
+
+  <!-- Modern, warm type pairing: Bricolage Grotesque (display) + Plus Jakarta Sans (body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,500;1,600&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Tiny brand mark, always present -->
+  <a class="brand" href="/">thecatproblem<span class="brand-dot">.</span>com</a>
+
+  <main>
+
+    <!-- ============================================================
+         SCREEN 1 — The warm open ("We love them, too.")
+         ============================================================ -->
+    <section class="step hero" id="s1-open">
+      <div class="hero-glow" aria-hidden="true"></div>
+      <div class="motes" aria-hidden="true"></div>
+
+      <div class="hero-inner">
+        <p class="kicker reveal">A gentle look at something we rarely question</p>
+        <h1 class="hero-title reveal">We love them, too.</h1>
+        <p class="hero-sub reveal">
+          Cats are extraordinary companions — playful, affectionate, endlessly
+          watchable. None of that is in question here.
+        </p>
+
+        <!-- Code-drawn cat, gently alive -->
+        <div class="cat-wrap reveal" aria-hidden="true">
+          <svg class="cat" viewBox="0 0 260 300" xmlns="http://www.w3.org/2000/svg" role="img">
+            <!-- soft shadow -->
+            <ellipse class="cat-shadow" cx="130" cy="286" rx="70" ry="12" />
+
+            <!-- tail (sways) -->
+            <path class="tail" d="M176,252 C224,262 252,224 232,188"
+                  fill="none" stroke="var(--cat)" stroke-width="24" stroke-linecap="round" />
+            <path class="tail-tip" d="M234,190 C226,183 218,184 214,193"
+                  fill="none" stroke="var(--cat-dark)" stroke-width="24" stroke-linecap="round" />
+
+            <!-- body + head breathe together -->
+            <g class="cat-torso">
+              <!-- body -->
+              <path class="body" d="M130,150 C92,150 76,182 76,216 C76,258 96,278 130,278
+                                     C164,278 184,258 184,216 C184,182 168,150 130,150 Z" />
+              <!-- belly patch -->
+              <ellipse class="belly" cx="130" cy="228" rx="30" ry="44" />
+
+              <!-- ears -->
+              <path class="ear" d="M96,96 L82,44 L128,78 Z" />
+              <path class="ear" d="M164,96 L178,44 L132,78 Z" />
+              <path class="ear-inner" d="M99,90 L90,58 L120,79 Z" />
+              <path class="ear-inner" d="M161,90 L170,58 L140,79 Z" />
+
+              <!-- head -->
+              <circle class="head" cx="130" cy="122" r="58" />
+
+              <!-- forehead tabby stripes -->
+              <path class="stripe" d="M130,68 L130,90" />
+              <path class="stripe" d="M115,71 L119,92" />
+              <path class="stripe" d="M145,71 L141,92" />
+
+              <!-- soft cheeks -->
+              <ellipse class="blush" cx="93" cy="141" rx="12" ry="7.5" />
+              <ellipse class="blush" cx="167" cy="141" rx="12" ry="7.5" />
+
+              <!-- big kawaii eyes -->
+              <g class="eyes">
+                <g class="eye eye-l">
+                  <ellipse class="eyeball" cx="107" cy="128" rx="13.5" ry="16.5" />
+                  <circle class="glint" cx="102" cy="121" r="4.6" />
+                  <circle class="glint glint-sm" cx="111" cy="134" r="2.4" />
+                </g>
+                <g class="eye eye-r">
+                  <ellipse class="eyeball" cx="153" cy="128" rx="13.5" ry="16.5" />
+                  <circle class="glint" cx="148" cy="121" r="4.6" />
+                  <circle class="glint glint-sm" cx="157" cy="134" r="2.4" />
+                </g>
+              </g>
+
+              <!-- nose + tiny mouth -->
+              <path class="nose" d="M124,147 L136,147 L130,154 Z" />
+              <path class="mouth" d="M130,154 C130,161 123,163 118,158" />
+              <path class="mouth" d="M130,154 C130,161 137,163 142,158" />
+
+              <!-- whiskers -->
+              <g class="whiskers">
+                <path d="M104,146 L64,138" /><path d="M104,152 L66,154" /><path d="M104,158 L70,168" />
+                <path d="M156,146 L196,138" /><path d="M156,152 L194,154" /><path d="M156,158 L190,168" />
+              </g>
+            </g>
+          </svg>
+        </div>
+
+        <p class="hero-turn reveal">That is exactly why this matters.</p>
+      </div>
+
+      <div class="scroll-cue" aria-hidden="true">
+        <span>keep scrolling, gently</span>
+        <svg viewBox="0 0 24 24" width="22" height="22"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         BRIDGE — the gentle turn toward the story
+         (sets up Screen 2; more screens slot in below over time)
+         ============================================================ -->
+    <section class="step bridge" id="s1-bridge">
+      <p class="bridge-line reveal">
+        But the moment a cat steps outside,
+        <br /><em>a quieter story begins.</em>
+      </p>
+    </section>
+
+  </main>
+
+  <script src="main.js"></script>
+</body>
+</html>
