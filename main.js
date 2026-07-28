@@ -4,7 +4,7 @@
 (function () {
   "use strict";
 
-  window.__catBuild = "s5-hidden";
+  window.__catBuild = "s6-health";
 
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
