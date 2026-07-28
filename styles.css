@@ -287,12 +287,12 @@ body {
 }
 .dot.lit { background: var(--terracotta); }
 .scale-legend {
-  margin: 18px 0 0;
-  font-size: 12px;
+  margin: 20px 0 0;
+  font-size: clamp(14px, 1.9vw, 17px);
   letter-spacing: .1em;
   text-transform: uppercase;
   font-weight: 700;
-  color: var(--ink-soft);
+  color: var(--ink);
 }
 .scale-source {
   margin: 6px 0 0;
@@ -321,10 +321,143 @@ body {
 .bridge-line em { color: var(--terracotta); font-style: normal; font-weight: 700; }
 
 /* ============================================================
+   SCREEN 3a — where cats rank (bar chart)
+   ============================================================ */
+.rank-inner { width: 100%; max-width: 780px; }
+.rank-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(28px, 4.8vw, 50px);
+  line-height: 1.08;
+  letter-spacing: -1px;
+  margin: 8px 0 38px;
+  max-width: 660px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.chart {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 100%;
+  text-align: left;
+}
+.bar-row {
+  display: grid;
+  grid-template-columns: minmax(80px, 128px) 1fr auto;
+  grid-template-areas: "label track value";
+  align-items: center;
+  gap: 14px;
+}
+.bar-label {
+  grid-area: label;
+  font-weight: 700;
+  font-size: clamp(12.5px, 1.6vw, 15px);
+  color: var(--ink);
+  text-align: right;
+  line-height: 1.15;
+}
+.bar-track {
+  grid-area: track;
+  position: relative;
+  height: 26px;
+  background: rgba(150, 120, 100, .10);
+  border-radius: 6px;
+  overflow: hidden;
+}
+.bar-fill {
+  height: 100%;
+  width: 0;
+  min-width: 3px;
+  border-radius: 6px;
+  background: var(--sage);
+  transition: width 1.3s var(--ease);
+}
+.bar-fill.cats { background: var(--terracotta); }
+.in-view .bar-fill { width: var(--w); }
+/* fill in top-to-bottom, cats first */
+.bar-row:nth-child(1) .bar-fill { transition-delay: .10s; }
+.bar-row:nth-child(2) .bar-fill { transition-delay: .22s; }
+.bar-row:nth-child(3) .bar-fill { transition-delay: .34s; }
+.bar-row:nth-child(4) .bar-fill { transition-delay: .46s; }
+.bar-row:nth-child(5) .bar-fill { transition-delay: .58s; }
+.bar-row:nth-child(6) .bar-fill { transition-delay: .70s; }
+.bar-value {
+  grid-area: value;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  font-size: clamp(12px, 1.5vw, 14px);
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+.rank-source {
+  margin: 30px 0 0;
+  font-size: 12.5px;
+  color: var(--ink-soft);
+  opacity: .85;
+}
+
+/* narrow screens: stack the label above its bar so the track keeps room */
+@media (max-width: 560px) {
+  .bar-row {
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      "label label"
+      "track value";
+    gap: 5px 12px;
+  }
+  .bar-label { text-align: left; }
+}
+
+/* ============================================================
+   SCREEN 3b — the honest reckoning
+   ============================================================ */
+.reckon {
+  background: linear-gradient(180deg, var(--cream) 0%, var(--cream-deep) 100%);
+}
+.reckon-inner { max-width: 680px; }
+.reckon-q {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(27px, 4.6vw, 46px);
+  letter-spacing: -.6px;
+  line-height: 1.1;
+  color: var(--terracotta);
+  margin: 0 0 24px;
+}
+.reckon-body {
+  font-size: clamp(17px, 2.1vw, 20px);
+  line-height: 1.62;
+  font-weight: 500;
+  color: var(--ink);
+  max-width: 600px;
+  margin: 0 auto 22px;
+}
+.reckon-turn {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(20px, 2.9vw, 29px);
+  line-height: 1.28;
+  letter-spacing: -.4px;
+  color: var(--ink);
+  max-width: 640px;
+  margin: 0 auto;
+}
+.reckon-turn em { color: var(--terracotta); font-style: normal; }
+.reckon-source {
+  margin: 26px 0 0;
+  font-size: 12.5px;
+  color: var(--ink-soft);
+  opacity: .85;
+}
+.reckon-source em { font-style: italic; }
+
+/* ============================================================
    Accessibility — respect reduced motion
    ============================================================ */
 @media (prefers-reduced-motion: reduce) {
   .cat-torso, .tail, .tail-tip, .scroll-cue svg, .mote { animation: none !important; }
   .reveal { transition-duration: .01ms; }
+  .bar-fill { transition-duration: .01ms; }
   html { scroll-behavior: auto; }
 }
