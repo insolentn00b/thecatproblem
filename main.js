@@ -4,7 +4,7 @@
 (function () {
   "use strict";
 
-  window.__catBuild = "s4-gallery";
+  window.__catBuild = "s5-hidden";
 
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -167,5 +167,31 @@
     window.addEventListener("scroll", gScroll, { passive: true });
     window.addEventListener("resize", gScroll);
     gRender();
+  }
+
+  /* ---------- Screen 5: the hidden-toll critter field ---------- */
+  const critterField = document.getElementById("critterField");
+  if (critterField) {
+    const TOTAL = 24;
+    const seen = new Set([3, 7, 11, 15, 19, 23]); // ~1 in 4 "brought home"
+    const bird =
+      '<svg viewBox="0 0 32 24" class="critter-ico" aria-hidden="true">' +
+      '<g fill="currentColor">' +
+      '<ellipse cx="14" cy="14" rx="9" ry="7"/>' +
+      '<circle cx="22" cy="9" r="4.5"/>' +
+      '<path d="M26,7 L31,9 L26,11 Z"/>' +
+      '<path d="M5,12 L1,6 L7,11 Z"/>' +
+      "</g></svg>";
+    const frag = document.createDocumentFragment();
+    for (let i = 0; i < TOTAL; i++) {
+      const isSeen = seen.has(i);
+      const span = document.createElement("span");
+      span.className = "critter " + (isSeen ? "seen" : "hidden");
+      // seen ones appear first; hidden ones cascade in afterward
+      span.style.transitionDelay = isSeen ? ".1s" : (0.7 + i * 0.03).toFixed(2) + "s";
+      span.innerHTML = bird;
+      frag.appendChild(span);
+    }
+    critterField.appendChild(frag);
   }
 })();

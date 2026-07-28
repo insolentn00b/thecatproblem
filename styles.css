@@ -566,11 +566,76 @@ body {
 .gallery-outro strong { color: var(--ink); font-weight: 800; }
 
 /* ============================================================
+   SCREEN 5 — why cats, specifically (the hidden toll)
+   ============================================================ */
+.seen-inner { max-width: 720px; }
+
+.critters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 11px 13px;
+  justify-content: center;
+  max-width: 452px;
+  margin: 30px auto 14px;
+}
+.critter {
+  opacity: 0;
+  transition: opacity .5s var(--ease);
+  color: #B7ADA3;
+  line-height: 0;
+}
+.critter.seen { color: var(--terracotta); }
+.critter-ico { width: 30px; height: auto; display: block; fill: currentColor; }
+.in-view .critter.seen { opacity: 1; }
+.in-view .critter.hidden { opacity: .32; }
+
+.critter-legend {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: .02em;
+  color: var(--ink-soft);
+  margin: 0 auto 26px;
+}
+.swatch {
+  display: inline-block;
+  width: 11px; height: 11px;
+  border-radius: 3px;
+  vertical-align: middle;
+}
+.swatch.seen { background: var(--terracotta); }
+.swatch.hidden { background: #C7BEB4; }
+
+.seen-stat {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(21px, 3.1vw, 31px);
+  letter-spacing: -.5px;
+  line-height: 1.15;
+  color: var(--ink);
+  margin: 4px 0 12px;
+}
+.seen-stat strong { color: var(--terracotta); }
+.seen-line {
+  font-size: clamp(16px, 2vw, 19px);
+  line-height: 1.55;
+  font-weight: 500;
+  color: var(--ink);
+  max-width: 540px;
+  margin: 0 auto 18px;
+}
+.seen-line strong { color: var(--terracotta); font-weight: 800; }
+
+/* ============================================================
    Accessibility — respect reduced motion
    ============================================================ */
 @media (prefers-reduced-motion: reduce) {
   .cat-torso, .tail, .tail-tip, .scroll-cue svg, .mote { animation: none !important; }
   .reveal { transition-duration: .01ms; }
   .bar-fill { transition-duration: .01ms; }
+  .critter { transition-duration: .01ms !important; transition-delay: 0s !important; }
   html { scroll-behavior: auto; }
 }
