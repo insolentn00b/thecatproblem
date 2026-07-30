@@ -4,7 +4,7 @@
 (function () {
   "use strict";
 
-  window.__catBuild = "s9-pages";
+  window.__catBuild = "s9-fanfare";
 
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -195,27 +195,83 @@
     critterField.appendChild(frag);
   }
 
-  /* ---------- Screen 9: pledge ---------- */
+  /* ---------- Screen 9: pledge (animated count-up + confetti) ---------- */
   const pledgeBtn = document.getElementById("pledgeBtn");
   const pledgeCount = document.getElementById("pledgeCount");
-  if (pledgeBtn) {
+  if (pledgeBtn && pledgeCount) {
     // Set window.CATPROBLEM_PLEDGE_URL once a counter backend is deployed.
     const PLEDGE_URL = window.CATPROBLEM_PLEDGE_URL || null;
+    let currentCount = null;
 
+    const fmt = (n) => {
+      if (n <= 0) return "Be the first to pledge.";
+      const noun = n === 1 ? "person has" : "people have";
+      return n.toLocaleString("en-US") + " " + noun + " pledged so far";
+    };
     const showCount = (n) => {
       if (typeof n !== "number" || isNaN(n)) return;
-      if (n <= 0) {
-        pledgeCount.textContent = "Be the first to pledge.";
+      currentCount = n;
+      pledgeCount.textContent = fmt(n);
+    };
+    const animateTo = (to) => {
+      const from = typeof currentCount === "number" ? currentCount : to;
+      currentCount = to;
+      if (reduceMotion || from === to) {
+        pledgeCount.textContent = fmt(to);
         return;
       }
-      const noun = n === 1 ? "person has" : "people have";
-      pledgeCount.textContent = n.toLocaleString("en-US") + " " + noun + " pledged so far";
+      const start = performance.now();
+      const dur = 700;
+      const tick = (t) => {
+        const p = Math.min(1, (t - start) / dur);
+        const eased = 1 - Math.pow(1 - p, 3);
+        pledgeCount.textContent = fmt(Math.round(from + (to - from) * eased));
+        if (p < 1) requestAnimationFrame(tick);
+        else pledgeCount.textContent = fmt(to);
+      };
+      requestAnimationFrame(tick);
+    };
+    const popCount = () => {
+      pledgeCount.classList.remove("pop");
+      void pledgeCount.offsetWidth; // reflow so the animation can restart
+      pledgeCount.classList.add("pop");
     };
     const setPledged = () => {
       pledgeBtn.textContent = "🐾 You're in — thank you";
       pledgeBtn.classList.add("pledged");
       pledgeBtn.disabled = true;
     };
+
+    function confetti(originEl) {
+      if (reduceMotion) return;
+      const colors = ["#E8A23D", "#D9744A", "#8FA98A", "#E9A7A0", "#5B4A3E"];
+      const r = originEl.getBoundingClientRect();
+      const cx = r.left + r.width / 2;
+      const cy = r.top + r.height / 2;
+      for (let i = 0; i < 46; i++) {
+        const piece = document.createElement("div");
+        piece.className = "confetti-piece";
+        piece.style.background = colors[i % colors.length];
+        piece.style.left = cx + "px";
+        piece.style.top = cy + "px";
+        document.body.appendChild(piece);
+        const ang = Math.random() * Math.PI * 2;
+        const sp = 5 + Math.random() * 8;
+        let vx = Math.cos(ang) * sp;
+        let vy = Math.sin(ang) * sp - 7; // bias the burst upward
+        let x = 0, y = 0, rot = Math.random() * 360, vr = (Math.random() - 0.5) * 24, life = 0;
+        (function frame() {
+          life++;
+          vy += 0.33; // gravity
+          x += vx;
+          y += vy;
+          piece.style.transform = `translate(${x}px, ${y}px) rotate(${(rot += vr)}deg)`;
+          piece.style.opacity = String(Math.max(0, 1 - life / 75));
+          if (life < 75) requestAnimationFrame(frame);
+          else piece.remove();
+        })();
+      }
+    }
 
     if (localStorage.getItem("cp_pledged") === "1") setPledged();
     if (PLEDGE_URL) {
@@ -226,10 +282,12 @@
       if (localStorage.getItem("cp_pledged") === "1") return;
       localStorage.setItem("cp_pledged", "1");
       setPledged();
+      confetti(pledgeBtn);
+      popCount();
       if (PLEDGE_URL) {
         fetch(PLEDGE_URL, { method: "POST" })
           .then((r) => r.json())
-          .then((d) => showCount(d.count))
+          .then((d) => animateTo(d.count))
           .catch(() => {});
       } else {
         pledgeCount.textContent = "Thank you for making the pledge.";

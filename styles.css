@@ -916,6 +916,24 @@ body {
   font-weight: 700;
   color: var(--ink-soft);
   min-height: 1.2em;
+  display: inline-block;
+}
+.pledge-count.pop { animation: countPop .55s var(--ease); }
+@keyframes countPop {
+  0%   { transform: scale(1);    color: var(--ink-soft); }
+  35%  { transform: scale(1.28); color: var(--terracotta); }
+  100% { transform: scale(1);    color: var(--ink-soft); }
+}
+
+/* pledge confetti */
+.confetti-piece {
+  position: fixed;
+  top: 0; left: 0;
+  width: 9px; height: 14px;
+  border-radius: 2px;
+  z-index: 9999;
+  pointer-events: none;
+  will-change: transform, opacity;
 }
 
 .closing-actions { margin: 0 0 36px; }
@@ -1022,5 +1040,6 @@ body {
   .reveal { transition-duration: .01ms; }
   .bar-fill { transition-duration: .01ms; }
   .critter { transition-duration: .01ms !important; transition-delay: 0s !important; }
+  .pledge-count.pop { animation: none; }
   html { scroll-behavior: auto; }
 }
