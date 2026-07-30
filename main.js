@@ -4,7 +4,7 @@
 (function () {
   "use strict";
 
-  window.__catBuild = "s7-s8";
+  window.__catBuild = "s9-pages";
 
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -193,5 +193,97 @@
       frag.appendChild(span);
     }
     critterField.appendChild(frag);
+  }
+
+  /* ---------- Screen 9: pledge ---------- */
+  const pledgeBtn = document.getElementById("pledgeBtn");
+  const pledgeCount = document.getElementById("pledgeCount");
+  if (pledgeBtn) {
+    // Set window.CATPROBLEM_PLEDGE_URL once a counter backend is deployed.
+    const PLEDGE_URL = window.CATPROBLEM_PLEDGE_URL || null;
+
+    const showCount = (n) => {
+      if (typeof n === "number" && !isNaN(n)) {
+        pledgeCount.textContent = n.toLocaleString("en-US") + " people have pledged so far";
+      }
+    };
+    const setPledged = () => {
+      pledgeBtn.textContent = "🐾 You're in — thank you";
+      pledgeBtn.classList.add("pledged");
+      pledgeBtn.disabled = true;
+    };
+
+    if (localStorage.getItem("cp_pledged") === "1") setPledged();
+    if (PLEDGE_URL) {
+      fetch(PLEDGE_URL).then((r) => r.json()).then((d) => showCount(d.count)).catch(() => {});
+    }
+
+    pledgeBtn.addEventListener("click", () => {
+      if (localStorage.getItem("cp_pledged") === "1") return;
+      localStorage.setItem("cp_pledged", "1");
+      setPledged();
+      if (PLEDGE_URL) {
+        fetch(PLEDGE_URL, { method: "POST" })
+          .then((r) => r.json())
+          .then((d) => showCount(d.count))
+          .catch(() => {});
+      } else {
+        pledgeCount.textContent = "Thank you for making the pledge.";
+      }
+    });
+  }
+
+  /* ---------- Screen 9: share ---------- */
+  const shareBtn = document.getElementById("shareBtn");
+  if (shareBtn) {
+    shareBtn.addEventListener("click", async () => {
+      const url = location.href.split("#")[0];
+      const data = {
+        title: "The Cat Problem",
+        text: "Cats are a leading cause of bird extinction — and it starts closer to home than most of us realize.",
+        url: url,
+      };
+      if (navigator.share) {
+        try { await navigator.share(data); } catch (e) {}
+      } else if (navigator.clipboard) {
+        try {
+          await navigator.clipboard.writeText(url);
+          const orig = shareBtn.textContent;
+          shareBtn.textContent = "Link copied ✓";
+          setTimeout(() => (shareBtn.textContent = orig), 2200);
+        } catch (e) {}
+      }
+    });
+  }
+
+  /* ---------- Contact page: AJAX form submit ---------- */
+  const contactForm = document.getElementById("contactForm");
+  if (contactForm) {
+    const status = document.getElementById("formStatus");
+    contactForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const honey = contactForm.querySelector('[name="_gotcha"]');
+      if (honey && honey.value) return; // bot caught in honeypot
+      status.style.color = "var(--ink-soft)";
+      status.textContent = "Sending…";
+      try {
+        const res = await fetch(contactForm.action, {
+          method: "POST",
+          body: new FormData(contactForm),
+          headers: { Accept: "application/json" },
+        });
+        if (res.ok) {
+          contactForm.reset();
+          status.style.color = "var(--sage)";
+          status.textContent = "Thank you — your message was sent.";
+        } else {
+          status.style.color = "var(--terracotta)";
+          status.textContent = "Something went wrong. Please try again.";
+        }
+      } catch (err) {
+        status.style.color = "var(--terracotta)";
+        status.textContent = "Something went wrong. Please try again.";
+      }
+    });
   }
 })();

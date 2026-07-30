@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Contact — The Cat Problem</title>
+  <meta name="description" content="Send a message to The Cat Problem." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,500;1,600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="page">
+    <a class="page-back" href="index.html">← Back to The Cat Problem</a>
+    <h1 class="page-title">Contact</h1>
+    <p class="page-intro">Questions, corrections, or ideas? Send a note.</p>
+
+    <!-- Backend: Web3Forms. Replace the access_key value with your own key from
+         web3forms.com (created with your private email — the key here is public but
+         does NOT reveal the destination address). -->
+    <form class="contact-form" id="contactForm" action="https://api.web3forms.com/submit" method="POST">
+      <input type="hidden" name="access_key" value="REPLACE_WITH_YOUR_WEB3FORMS_ACCESS_KEY" />
+      <input type="hidden" name="subject" value="New message from TheCatProblem.com" />
+      <input type="hidden" name="from_name" value="TheCatProblem.com" />
+
+      <!-- honeypot: real people leave this empty; bots fill it and get silently dropped -->
+      <input type="text" name="_gotcha" class="hp-field" tabindex="-1" autocomplete="off" aria-hidden="true" />
+
+      <div class="field">
+        <label for="cf-name">Name <span style="font-weight:400;opacity:.6">(optional)</span></label>
+        <input id="cf-name" type="text" name="name" autocomplete="off" />
+      </div>
+
+      <div class="field">
+        <label for="cf-email">Email <span style="font-weight:400;opacity:.6">(optional — only if you'd like a reply)</span></label>
+        <input id="cf-email" type="email" name="email" autocomplete="off" />
+      </div>
+
+      <div class="field">
+        <label for="cf-msg">Message</label>
+        <textarea id="cf-msg" name="message" required></textarea>
+      </div>
+
+      <button class="submit-btn" type="submit">Send message</button>
+      <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
+    </form>
+
+    <p class="form-note">Messages are spam-filtered and delivered privately. Nothing is stored on this site.</p>
+  </div>
+
+  <script src="main.js"></script>
+</body>
+</html>
