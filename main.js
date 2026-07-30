@@ -285,13 +285,18 @@
       localStorage.setItem("cp_pledged", "1");
       setPledged();
       confetti(pledgeBtn);
-      popCount();
       if (PLEDGE_URL) {
+        // optimistic: bump the number the instant they click
+        const optimistic = (typeof currentCount === "number" ? currentCount : 0) + 1;
+        showCount(optimistic);
+        popCount();
+        // then reconcile with the server; only ever tick UP, never down
         fetch(bust(), { method: "POST" })
           .then((r) => r.json())
-          .then((d) => animateTo(d.count))
+          .then((d) => { if (typeof d.count === "number" && d.count > currentCount) animateTo(d.count); })
           .catch(() => {});
       } else {
+        popCount();
         pledgeCount.textContent = "Thank you for making the pledge.";
       }
     });
