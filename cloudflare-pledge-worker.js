@@ -2,12 +2,12 @@
    TheCatProblem.com — pledge counter (Cloudflare Worker)
 
    Deploy this as a Worker with a KV namespace bound as "PLEDGES".
-   - GET  -> { "count": N }              (read the current total)
-   - POST -> increments, returns { "count": N }  (one per IP per day)
+   - GET  -> { "count": N }                    (read the current total)
+   - POST -> increments, returns { "count": N } (guarded by a short per-IP cooldown)
 
-   Setup steps are in the chat. Once deployed, send the Worker URL
-   (e.g. https://catproblem-pledge.<you>.workers.dev) and it gets
-   wired into the site's pledge button.
+   The site already stops a normal visitor pledging twice (localStorage), so
+   COOLDOWN just limits deliberate rapid-fire from one IP. Raise it for stronger
+   anti-spam (e.g. 3600 = one per hour per IP); set 0 to count literally every click.
    ============================================================ */
 
 export default {
@@ -17,24 +17,22 @@ export default {
       "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
       "Access-Control-Allow-Headers": "Content-Type",
       "Content-Type": "application/json",
+      "Cache-Control": "no-store",
     };
 
-    if (request.method === "OPTIONS") {
-      return new Response(null, { headers: cors });
-    }
+    if (request.method === "OPTIONS") return new Response(null, { headers: cors });
 
     const KEY = "pledges";
     let count = parseInt((await env.PLEDGES.get(KEY)) || "0", 10);
 
     if (request.method === "POST") {
-      // light anti-abuse: at most one increment per IP per day
+      const COOLDOWN = 15; // seconds one IP must wait between pledges
       const ip = request.headers.get("CF-Connecting-IP") || "unknown";
-      const ipKey = "ip:" + ip;
-      const alreadyPledged = await env.PLEDGES.get(ipKey);
-      if (!alreadyPledged) {
+      const recent = COOLDOWN > 0 ? await env.PLEDGES.get("ip:" + ip) : null;
+      if (!recent) {
         count += 1;
         await env.PLEDGES.put(KEY, String(count));
-        await env.PLEDGES.put(ipKey, "1", { expirationTtl: 86400 });
+        if (COOLDOWN > 0) await env.PLEDGES.put("ip:" + ip, "1", { expirationTtl: COOLDOWN });
       }
     }
 
