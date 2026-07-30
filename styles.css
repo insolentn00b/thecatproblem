@@ -919,12 +919,13 @@ body {
   transform: none;
 }
 .pledge-count {
-  margin: 14px 0 0;
+  display: block;
+  width: fit-content;
+  margin: 14px auto 0;
   font-size: 14px;
   font-weight: 700;
   color: var(--ink-soft);
   min-height: 1.2em;
-  display: inline-block;
 }
 .pledge-count.pop { animation: countPop .55s var(--ease); }
 @keyframes countPop {

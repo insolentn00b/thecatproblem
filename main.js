@@ -273,9 +273,11 @@
       }
     }
 
+    const bust = () => PLEDGE_URL + (PLEDGE_URL.includes("?") ? "&" : "?") + "t=" + Date.now();
+
     if (localStorage.getItem("cp_pledged") === "1") setPledged();
     if (PLEDGE_URL) {
-      fetch(PLEDGE_URL).then((r) => r.json()).then((d) => showCount(d.count)).catch(() => {});
+      fetch(bust()).then((r) => r.json()).then((d) => showCount(d.count)).catch(() => {});
     }
 
     pledgeBtn.addEventListener("click", () => {
@@ -285,7 +287,7 @@
       confetti(pledgeBtn);
       popCount();
       if (PLEDGE_URL) {
-        fetch(PLEDGE_URL, { method: "POST" })
+        fetch(bust(), { method: "POST" })
           .then((r) => r.json())
           .then((d) => animateTo(d.count))
           .catch(() => {});
