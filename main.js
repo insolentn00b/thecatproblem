@@ -4,7 +4,7 @@
 (function () {
   "use strict";
 
-  window.__catBuild = "s6-health";
+  window.__catBuild = "s7-s8";
 
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
