@@ -506,11 +506,19 @@ body {
   transform: none;
   pointer-events: auto;
 }
-.silhouette { color: #8E8379; margin-bottom: 6px; }
+.silhouette {
+  margin-bottom: 6px;
+  height: clamp(120px, 20vh, 158px);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
 .sil {
-  width: clamp(150px, 38vw, 220px);
-  height: auto;
   display: block;
+  height: 100%;
+  width: auto;
+  max-width: 90%;
+  object-fit: contain;
 }
 .species-name {
   font-family: var(--font-display);
