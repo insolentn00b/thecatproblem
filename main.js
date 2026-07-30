@@ -203,9 +203,13 @@
     const PLEDGE_URL = window.CATPROBLEM_PLEDGE_URL || null;
 
     const showCount = (n) => {
-      if (typeof n === "number" && !isNaN(n)) {
-        pledgeCount.textContent = n.toLocaleString("en-US") + " people have pledged so far";
+      if (typeof n !== "number" || isNaN(n)) return;
+      if (n <= 0) {
+        pledgeCount.textContent = "Be the first to pledge.";
+        return;
       }
+      const noun = n === 1 ? "person has" : "people have";
+      pledgeCount.textContent = n.toLocaleString("en-US") + " " + noun + " pledged so far";
     };
     const setPledged = () => {
       pledgeBtn.textContent = "🐾 You're in — thank you";
