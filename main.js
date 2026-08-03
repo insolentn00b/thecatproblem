@@ -4,7 +4,7 @@
 (function () {
   "use strict";
 
-  window.__catBuild = "s9-fanfare";
+  window.__catBuild = "edits-batch1";
 
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -354,5 +354,28 @@
         status.textContent = "Something went wrong. Please try again.";
       }
     });
+  }
+
+  /* ---------- Screen 6: size the pathway line to span badge 1 -> badge 5 ---------- */
+  const pathway = document.querySelector(".pathway");
+  if (pathway) {
+    const pathBase = pathway.querySelector(".path-base");
+    const pathFill = pathway.querySelector(".path-fill");
+    const sizePath = () => {
+      const badges = pathway.querySelectorAll(".node-badge");
+      if (!badges.length || !pathBase) return;
+      const pTop = pathway.getBoundingClientRect().top;
+      const first = badges[0].getBoundingClientRect();
+      const last = badges[badges.length - 1].getBoundingClientRect();
+      const topY = first.top - pTop + first.height / 2;
+      const span = last.top - pTop + last.height / 2 - topY;
+      pathBase.style.top = topY + "px";
+      pathBase.style.height = span + "px";
+      if (pathFill) pathFill.style.top = topY + "px";
+      pathway.style.setProperty("--fill-h", span + "px");
+    };
+    sizePath();
+    window.addEventListener("resize", sizePath);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(sizePath);
   }
 })();

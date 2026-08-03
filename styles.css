@@ -42,7 +42,7 @@ body {
 
 /* ---------- brand mark ---------- */
 .brand {
-  position: fixed;
+  position: absolute;
   top: 22px; left: 26px;
   z-index: 50;
   font-family: var(--font-body);
@@ -460,7 +460,7 @@ body {
 
 .gallery {
   position: relative;
-  height: 520vh;                 /* scroll distance across the 5 species */
+  height: 330vh;                 /* scroll distance across the 5 species */
   background: var(--cream-deep);
 }
 .gallery-sticky {
@@ -660,11 +660,11 @@ body {
   max-width: 500px;
   margin: 0 auto;
 }
-.pathway::before {
-  content: "";
+.path-base {
   position: absolute;
-  left: 26px; top: 42px; bottom: 42px;
+  left: 26px; top: 42px;
   width: 3px;
+  height: calc(100% - 84px);
   background: rgba(120, 110, 100, .18);
   border-radius: 2px;
 }
@@ -677,7 +677,7 @@ body {
   border-radius: 2px;
   transition: height 2.4s var(--ease);
 }
-.in-view .path-fill { height: calc(100% - 84px); }
+.in-view .path-fill { height: var(--fill-h, calc(100% - 84px)); }
 .pnode {
   position: relative;
   display: grid;
@@ -1042,13 +1042,63 @@ body {
 .form-status { font-size: 15px; font-weight: 700; margin: 8px 0 0; min-height: 1.2em; }
 
 /* ============================================================
+   Sequential "dealt onto the table" card reveal (left -> right)
+   ============================================================ */
+.deal-in {
+  opacity: 0;
+  transform: translateX(-42px);
+  transition: opacity .55s var(--ease), transform .55s var(--ease);
+}
+.in-view .deal-in { opacity: 1; transform: none; }
+.in-view .deal-in:nth-child(1) { transition-delay: .05s; }
+.in-view .deal-in:nth-child(2) { transition-delay: .22s; }
+.in-view .deal-in:nth-child(3) { transition-delay: .39s; }
+.in-view .deal-in:nth-child(4) { transition-delay: .56s; }
+
+/* ============================================================
+   "keep scrolling" hint for pinned sections (counter, gallery)
+   ============================================================ */
+.scroll-hint {
+  position: absolute;
+  bottom: 20px; left: 50%;
+  transform: translateX(-50%);
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  color: var(--ink-soft);
+  font-size: 11px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  font-weight: 700;
+  opacity: .55;
+  pointer-events: none;
+}
+.scroll-hint svg { animation: bob 1.8s var(--ease) infinite; }
+
+/* first mention of the parasite — make it stand out */
+.term-first {
+  font-style: italic;
+  font-weight: 800;
+  color: var(--ink);
+}
+
+/* short bridge beats needn't eat a whole screen on desktop —
+   letting the next section peek cues the reader to keep scrolling */
+@media (min-width: 760px) {
+  .bridge { min-height: 66vh; }
+}
+
+/* ============================================================
    Accessibility — respect reduced motion
    ============================================================ */
 @media (prefers-reduced-motion: reduce) {
-  .cat-torso, .tail, .tail-tip, .scroll-cue svg, .mote { animation: none !important; }
+  .cat-torso, .tail, .tail-tip, .scroll-cue svg, .scroll-hint svg, .mote { animation: none !important; }
   .reveal { transition-duration: .01ms; }
   .bar-fill { transition-duration: .01ms; }
   .critter { transition-duration: .01ms !important; transition-delay: 0s !important; }
+  .deal-in { transition-duration: .01ms !important; transition-delay: 0s !important; }
   .pledge-count.pop { animation: none; }
   html { scroll-behavior: auto; }
 }
