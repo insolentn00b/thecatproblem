@@ -188,6 +188,8 @@ body {
 
 .body      { fill: var(--cat); }
 .belly     { fill: var(--cat-cream); }
+.leg       { fill: var(--cat); }
+.toe       { stroke: #5E6166; stroke-width: 2.2; stroke-linecap: round; fill: none; opacity: .65; }
 .head      { fill: var(--cat); }
 .ear       { fill: var(--cat); }
 .ear-inner { fill: var(--cat-pink); }
