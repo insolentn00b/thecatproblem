@@ -1078,6 +1078,17 @@ body {
   pointer-events: none;
 }
 .scroll-hint svg { animation: bob 1.8s var(--ease) infinite; }
+/* on desktop, move the cue into the side margin, aligned with the graphic */
+@media (min-width: 760px) {
+  .scroll-hint {
+    left: auto; bottom: auto;
+    right: clamp(16px, 5vw, 74px);
+    top: 50%;
+    transform: translateY(-50%);
+    gap: 10px;
+  }
+  .scroll-hint span { writing-mode: vertical-rl; letter-spacing: .22em; }
+}
 
 /* first mention of the parasite — make it stand out */
 .term-first {
